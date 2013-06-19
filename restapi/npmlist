@@ -1,0 +1,46 @@
+application-name@0.0.1 /home/cwan/work/node/restapi
+├─┬ express@3.1.1
+│ ├── buffer-crc32@0.2.1
+│ ├── commander@0.6.1
+│ ├─┬ connect@2.7.4
+│ │ ├── buffer-crc32@0.1.1
+│ │ ├── bytes@0.2.0
+│ │ ├── formidable@1.0.11
+│ │ ├── pause@0.0.1
+│ │ └── qs@0.5.1
+│ ├── cookie@0.0.5
+│ ├── cookie-signature@0.0.1
+│ ├── debug@0.7.2
+│ ├── fresh@0.1.0
+│ ├── methods@0.0.1
+│ ├── mkdirp@0.3.5
+│ ├── range-parser@0.0.4
+│ └─┬ send@0.1.0
+│   └── mime@1.2.6
+├─┬ jade@0.29.0
+│ ├── character-parser@1.0.0
+│ ├── commander@0.6.1
+│ ├── mkdirp@0.3.5
+│ ├─┬ monocle@0.1.43
+│ │ └─┬ readdirp@0.2.4
+│ │   └─┬ minimatch@0.2.12
+│ │     ├── lru-cache@2.3.0
+│ │     └── sigmund@1.0.0
+│ └─┬ transformers@1.8.3
+│   └─┬ promise@2.0.0
+│     └── is-promise@1.0.0
+├─┬ mysql@2.0.0-alpha7
+│ ├── bignumber.js@1.0.1
+│ └── require-all@0.0.3
+├── node-uuid@1.4.0
+└─┬ nodemailer@0.4.1
+  ├─┬ mailcomposer@0.1.31
+  │ ├── mime@1.2.9
+  │ └─┬ mimelib@0.2.12
+  │   ├── addressparser@0.1.3
+  │   └─┬ encoding@0.1.6
+  │     └── iconv-lite@0.2.7
+  └─┬ simplesmtp@0.2.4
+    ├── rai@0.1.7
+    └── xoauth2@0.1.7
+
