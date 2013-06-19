@@ -1,0 +1,106 @@
+
+extends layout
+
+block scripts
+  script(src='/javascripts/jquery-1.8.3.min.js')
+  script(type='text/javascript')
+    $(document).ready(function () {
+      $("button#register").click(function () {
+        $.post('/user',
+        {"firstName": $(regFirstName).val(),
+         "lastName": $(regLastName).val(),
+         "phoneNumber": $(regPhoneNumber).val(), 
+         "email": $(regEmail).val(), 
+         "passwd": $(regPasswd).val()
+        },
+        function(data, status){
+          alert("data=" + data + "\nstatus=" + status);
+        })
+        .fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#login").click(function () {
+        $.post('/user/login', 
+        {"email": $(loginEmail).val(), "passwd": $(loginPasswd).val()}, 
+        function(data, status){
+          alert("data=" + data + "\nstatus=" + status);
+        })
+        .fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#viewUser").click(function () {
+        $("textarea#userInfo").val('');          
+        $.get('/user', 
+        function(data, status){
+          alert("status=" + status);
+          $("textarea#userInfo").val(JSON.stringify(data));          
+        }, "json")
+        .fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#logout").click(function () {
+        $.post('/user/logout', 
+        null,
+        function(data, status){
+          alert("data=" + data + "\nstatus=" + status);
+        })
+        .fail(function(data) { alert(JSON.stringify(data)); });
+      });
+    });
+
+    
+block content
+  h1 Welcome to #{title} Page
+  p ------------------------------------------------------------------------------------------------------------------
+  h2 Registration
+  table(border='1')
+    tr 
+      th Key
+      th Value
+    tr
+      td firstName
+      td
+        input(type="text", id="regFirstName", value="Changchun", size="20", maxlength="10")
+    tr
+      td lastName
+      td
+        input(type="text", id="regLastName", value="WAN", size="20", maxlength="10")
+    tr
+      td phoneNumber
+      td
+        input(type="text", id="regPhoneNumber", value="18612345678", size="20", maxlength="11")
+    tr
+      td email
+      td
+        input(type="text", id="regEmail", value="cwan@sychip.com.cn", size="20", maxlength="20")
+    tr
+      td passwd
+      td
+        input(type="text", id="regPasswd", value="123456", size="20", maxlength="10")
+  button(type="button", id="register") Register
+  br
+  | Your will receive a confirmation email!
+  p ------------------------------------------------------------------------------------------------------------------
+  h2 Login
+  table(border='1')
+    tr 
+      th Key
+      th Value
+    tr
+      td email
+      td
+        input(type="text", id="loginEmail", value="cwan@sychip.com.cn", size="20", maxlength="20")
+    tr
+      td passwd
+      td
+        input(type="text", id="loginPasswd", value="123456", size="20", maxlength="10")
+  button(type="button", id="login") Login
+  p ------------------------------------------------------------------------------------------------------------------
+  h2 Get Your User Info
+  button(type="button", id="viewUser") Get
+  br
+  textarea(id="userInfo", readonly="readonly", cols="50", rows="6")
+  p ------------------------------------------------------------------------------------------------------------------
+  h2 Logout
+  button(type="button", id="logout") Logout
+  br
+  
+  
+  

@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  h1 Welcome to #{title}
+  ul
+    li
+      a(href='/test/vendor') Vendor Registration
+      br
+      | A vendor should register on cloud server, and get a vendor key.
+      br
+      | All you product should have the vendor key burned inside when out of factory.
+      | A product should also have a uuid on its package.
+      br
+      br
+    li
+      a(href='/test/user') User Registration, Login, and adding a network interface
+      br
+      | User should register on cloud server, and reply to the email to activate the account.
+      br
+      | A user buys a product with UUID. 
+      br
+      | He should login and create a network interface for the product under his account.
+      br
+      br
+    li
+      a(href='/test/device') Device and Data storage
+      br
+      | After being assigned to a user, a device can get the user's api key and register itself on cloud server.
+      br
+      | And push data to the cloud server. 
+      br
+      br
+    li 
+      a(href='/test/rule') Scheduler and Rule
+      br
+      | A user can create schedulers and rules to link the behaviors of his devices.
+
+      

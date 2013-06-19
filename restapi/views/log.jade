@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Welcome to #{title}
+  table#data(border='1')
+    tr
+      th id
+      th caller
+      th url
+      th req
+      th resp
+      th time
+    each item in data    
+      tr
+      td= item.id
+      td= item.caller
+      td= item.url
+      td(style="word-break:break-all")= item.req
+      td(style="word-break:break-all")= item.resp
+      td= item.ts
+
+  

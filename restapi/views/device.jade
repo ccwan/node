@@ -1,0 +1,200 @@
+extends layout
+
+block scripts
+  script(src='/javascripts/jquery-1.8.3.min.js')
+  script(type='text/javascript')
+    $(document).ready(function () {
+      $("button#createVendor").click(function () {
+        $.post('/vendor',
+          {"name": $(createVendorName).val()}, 
+          function(data, status){
+            alert("status=" + status);
+            $("textarea#vendor").val(JSON.stringify(data));   
+          }
+        ).fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#createNwkIf").click(function () {
+        $.post('/nwkIf/'+$(createNwkIfUuid).val(),
+          null, 
+          function(data, status){
+            alert("data=" + data + "\nstatus=" + status);
+          }
+        ).fail(function(data) {alert(JSON.stringify(data));});
+      });
+      $("button#listNwkIf").click(function () {
+        $("textarea#nwkIfList").val('');
+        $.get('/nwkIf',
+          function(data, status){
+            alert("status=" + status);
+            $("textarea#nwkIfList").val(JSON.stringify(data));
+          }
+        ).fail(function(data) {alert(JSON.stringify(data));});
+      });
+      $("button#viewNwkIf").click(function () {
+        $("textarea#apiKey").val('');
+        $.ajax({
+          type: "GET",
+          url: "/nwkIf/"+$(viewNwkIfUuid).val(), 
+          beforeSend: function(request) {
+            request.setRequestHeader("vendor_key", $(vendorKey).val());
+          }
+        }).done(function(data, status){
+          var kk = JSON.parse(data)
+          $("textarea#apiKey").val(kk[0].api_key);
+          alert("data=" + data + "\nstatus=" + status);
+        })
+        .fail(function(data) {
+          alert(JSON.stringify(data));
+        });
+      });
+      $("button#createDevice").click(function () {
+        $.ajax({
+          type: "POST",
+          url: "/device", 
+          headers: {api_key: $(apiKey).val()},
+          data: {
+            uuid: $(createDeviceUuid).val(), 
+            title: $(createDeviceTitle).val(),
+            nwkIf_uuid: $(viewNwkIfUuid).val(),
+            model_id: 1
+          }
+        }).done(function(data, status){
+          alert("data=" + data + "\nstatus=" + status);
+        })
+        .fail(function(data) {alert(JSON.stringify(data));});
+      });
+      $("button#listDevice").click(function () {
+        $("textarea#deviceList").val('');
+        $.get('/device',
+          function(data, status){
+            alert("status=" + status);
+            $("textarea#deviceList").val(data);
+          }
+        ).fail(function(data) {alert(JSON.stringify(data));});
+      });
+      $("button#createDataPoint").click(function () {
+        $.ajax({
+          type: "POST",
+          url: "/data", 
+          headers: {api_key: $(apiKey).val()},
+          data: {
+            data_key: $(data_key).val(), 
+            data_value: $(data_value).val(),
+            uuid: $(viewNwkIfUuid).val(),
+          }
+        }).done(function(data, status){
+          alert("data=" + data + "\nstatus=" + status);
+        })
+        .fail(function(data) {alert(JSON.stringify(data));});
+      });
+      $("button#listDataPoint").click(function () {
+        $("textarea#dataPointList").val('');
+        $.get('/device/' + $(listDataPointDeviceId).val() + '/data',
+          function(data, status){
+            alert("status=" + status);
+            $("textarea#dataPointList").val(data);
+          }
+        ).fail(function(data) {alert(JSON.stringify(data));});
+      });
+    });
+
+block content
+  h1 Welcome to #{title}
+  
+  table(border='1', width='50%')
+    tr 
+      th UI
+      th Device
+    //- row 1
+    tr
+      td
+        p First, create a network interface
+        table(border='1')
+          tr 
+            th Key
+            th Value
+          tr
+            td uuid
+            td
+              input(type="text", id="createNwkIfUuid", value="12-123456FF-FF123456-12", size="30", maxlength="23")
+        button(type="button", id="createNwkIf") Create
+      td
+    //- row 2
+    tr
+      td
+        p 
+          |Get your network interfaces
+          button(type="button", id="listNwkIf") Get
+        textarea(id="nwkIfList", readonly="readonly", cols="50", rows="2")
+      td
+    //- row 3
+    tr
+      td
+      td
+        p
+          | Now the device can get user key
+          br
+          | with its vendor key.
+          input(type="text", id="vendorKey", value="f66b6310-a802-11e2-89fb-df69010a3e55", size="40")
+          br
+          a(href='/test/vendor') Forgot vendor key? Check here.
+          br
+          | and uuid 
+          input(type="text", id="viewNwkIfUuid", value="12-123456FF-FF123456-12", size="40")
+          br
+          button(type="button", id="viewNwkIf") Get
+        textarea(id="apiKey", readonly="readonly", cols="50", rows="2")
+    //- row 4
+    tr
+      td
+      td
+        p Create a device now
+        table(border='1')
+          tr 
+            th Key
+            th Value
+          tr
+            td uuid
+            td
+              input(type="text", id="createDeviceUuid", value="12-123456FF-FF123456-12", size="30", maxlength="23")
+          tr
+            td title
+            td
+              input(type="text", id="createDeviceTitle", value="my device1", size="30", maxlength="30")
+        button(type="button", id="createDevice") Create
+        br
+    //- row 5
+    tr
+      td
+        p Get your devices
+          button(type="button", id="listDevice") Get
+        textarea(id="deviceList", readonly="readonly", cols="50", rows="2")
+      td
+    //- row 6
+    tr
+      td
+      td
+        p Create a data point
+        table(border='1')
+          tr 
+            th Key
+            th Value
+          tr
+            td data_key
+            td
+              input(type="text", id="data_key", value="onoff", size="30", maxlength="22")
+          tr
+            td data_value
+            td
+              input(type="text", id="data_value", value="my device1", size="30", maxlength="22")
+        button(type="button", id="createDataPoint") Create
+    //- row 7
+    tr
+      td
+        p 
+          | Get your datapoints for device
+          input(type="text", id="listDataPointDeviceId", value="1", size="3", maxlength="3")
+          |   
+          button(type="button", id="listDataPoint") Get
+        textarea(id="dataPointList", readonly="readonly", cols="50", rows="2")
+      td

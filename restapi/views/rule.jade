@@ -1,0 +1,148 @@
+extends layout
+
+block scripts
+  items = new Object();
+  script(src='/javascripts/jquery-1.8.3.min.js')
+  script(type='text/javascript')
+    function getHandler(id) {
+      $.get('/model/' + id,
+        function(data, status){
+          $("#handlerSelector").empty();
+          alert(data);
+          var handlers = JSON.parse(data);
+          for (var i=0; i<handlers.length; i++) {
+            var s = document.createElement("input");
+            s.type = "radio";
+            s.value = handlers[i].id;
+            s.name = "handlerChoices";
+            $("#handlerSelector").append(s);
+            $("#handlerSelector").append(handlers[i].title);
+            $("#handlerSelector").append("<br>");
+          }          
+        }
+      ).fail(function(data) {alert(JSON.stringify(data));});
+    }
+    $(document).ready(function () {
+      $.get('/device',
+        function(data, status){
+          $("#deviceSelector").empty();
+          var devices = JSON.parse(data);
+          for (var i=0; i<devices.length; i++) {
+            var s = document.createElement("input");
+            s.type = "radio";
+            s.value = devices[i].id;
+            s.name = "deviceChoices";
+            s.setAttribute("onclick", "javascript: getHandler(" + devices[i].model_id + ");");           
+            $("#deviceSelector").append(s);
+            $("#deviceSelector").append(devices[i].title);
+            $("#deviceSelector").append("<br>");
+          }          
+        }
+      ).fail(function(data) {alert(JSON.stringify(data));});
+      
+      $("button#createScheduler").click(function () {
+
+      });
+
+      $("#h").click(function () {
+        $("#repeat").hide;
+      });
+
+    });
+
+block content
+  h1 Welcome to #{title}
+  p ------------------------------------------------------------------------------------------------------------------
+  h3 Create a scheduler
+  table(border='1')
+    tr 
+      td
+        | Every
+        input(type="text", id="intervalNumber", value='1', size=3, maxlength=3)
+        br
+        input(type="radio", id="o", name="intervalUnit", value="once")
+        | Once
+        br
+        input(type="radio", id="y", name="intervalUnit", value="year")
+        | Year
+        br
+        input(type="radio", id="m", name="intervalUnit", value="month")
+        | Month
+        br
+        input(type="radio", id="d", name="intervalUnit", value="day")
+        | Day
+        br
+        input(type="radio", id="w", name="intervalUnit", value="week")
+        | Week
+        br
+        input(type="radio", id="h", name="intervalUnit", value="hour")
+        | Hour
+        br
+        input(type="radio", id="mm", name="intervalUnit", value="minute")
+        | Minute
+        br
+        input(type="radio", id="s", name="intervalUnit", value="second")
+        | Second
+        br
+      td
+        p 
+          | Occurring at 
+          input(type="text", id="startYear", value='2013', size=4, maxlength=4)
+          | -
+          input(type="text", id="startMonth", value='04', size=2, maxlength=2)
+          | -
+          input(type="text", id="startDay", value='22', size=2, maxlength=2)
+          | T
+          input(type="text", id="startHour", value='12', size=2, maxlength=2)
+          | :
+          input(type="text", id="startMinute", value='00', size=2, maxlength=2)
+        p
+          | And recover after
+          br
+          input(type="text", id="durationYear", value='1', size=2, maxlength=2)
+          | Year
+          input(type="text", id="durationMonth", value='1', size=2, maxlength=2)
+          | Month
+          input(type="text", id="durationDay", value='1', size=2, maxlength=2)
+          | Day
+          input(type="text", id="durationHour", value='1', size=2, maxlength=2)
+          | Hour
+          input(type="text", id="durationMonth", value='1', size=2, maxlength=2)
+          | Minute
+          input(type="text", id="durationSecond", value='1', size=2, maxlength=2)
+          | Second
+        p(id="repeat")
+          | Repeat: The 
+          input(type="text", id="intervalWeekdayNumber", value='1', size=3, maxlength=3)
+          | th
+          br
+          input(type="checkbox", id="intervalSun") 
+          | Sun
+          input(type="checkbox", id="intervalMon") 
+          | Mon
+          input(type="checkbox", id="intervalTue") 
+          | Tue
+          input(type="checkbox", id="intervalWed") 
+          | Wed
+          input(type="checkbox", id="intervalThu") 
+          | Thu
+          input(type="checkbox", id="intervalFri") 
+          | Fri
+          input(type="checkbox", id="intervalSat") 
+          | Sat
+  button(type="button", id="createScheduler") Create
+  p ------------------------------------------------------------------------------------------------------------------
+  h3 Create a trigger
+  button(type="button", id="getDevice") Begin
+  table(border='1')
+    tr 
+      th Device
+      th Handler
+    tr
+      td 
+        p(id = 'deviceSelector')
+      td
+        p(id = 'handlerSelector')
+              
+
+      

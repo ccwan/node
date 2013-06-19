@@ -1,0 +1,96 @@
+extends layout
+
+block scripts
+  script(src='/javascripts/jquery-1.8.3.min.js')
+  script(type='text/javascript')
+    $(document).ready(function () {
+      $("button#createVendor").click(function () {
+        $.post('/vendor',
+          {"name": $(createVendorName).val()}, 
+          function(data, status){
+            $("textarea#vendor").val(JSON.stringify(data));   
+          }
+        ).fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#listVendor").click(function () {
+        $.get('/vendor',
+          null, 
+          function(data, status){
+            $("textarea#vendorList").val(JSON.stringify(data));   
+          }
+        ).fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#listDeviceType").click(function () {
+        $.get('/deviceType',
+          null, 
+          function(data, status){
+            $("textarea#deviceTypeList").val(JSON.stringify(data));   
+          }
+        ).fail(function(data) { alert(JSON.stringify(data)); });
+      });
+      $("button#createModel").click(function () {
+        $.post('/model',
+          {"name": $(createModelName).val(), 
+           "vendor_id": $(createModelVendorId).val(),
+           "deviceType_id": $(createModelDeviceTypeId).val()
+          }, 
+          function(data, status){
+            $("textarea#model").val(JSON.stringify(data));   
+          }
+        ).fail(function(data) { alert(JSON.stringify(data)); });
+      });
+    });
+
+block content
+  h1 Welcome to #{title}
+  
+  
+  p
+    | Create a vendor account?
+  table(border='1')
+    tr 
+      th Key
+      th Value
+    tr
+      td name
+      td
+        input(type="text", id="createVendorName", value="SyChip", size="30", maxlength="22")
+  button(type="button", id="createVendor") Create
+  p 
+    | Your key should be burned in devices in factory
+  textarea(id="vendor", readonly="readonly", cols="50", rows="2")
+  p ------------------------------------------------------------------------------------------------------------------
+  p
+    | List all vendors. 
+  button(type="button", id="listVendor") Get all vendor!
+  br
+  textarea(id="vendorList", readonly="readonly", cols="50", rows="2")
+  p ------------------------------------------------------------------------------------------------------------------
+  p
+    | List all device types. 
+  button(type="button", id="listDeviceType") Get all Device Type!
+  br
+  textarea(id="deviceTypeList", readonly="readonly", cols="50", rows="2")
+  
+  p ------------------------------------------------------------------------------------------------------------------
+  p
+    | Create a model.
+  table(border='1')
+    tr 
+      th Key
+      th Value
+    tr
+      td name
+      td
+        input(type="text", id="createModelName", value="SychipLight", size="30", maxlength="22")
+    tr
+      td vendor_id
+      td
+        input(type="text", id="createModelVendorId", value="1", size="30", maxlength="22")
+    tr
+      td deviceType_id
+      td
+        input(type="text", id="createModelDeviceTypeId", value="1", size="30", maxlength="22")
+  button(type="button", id="createModel") Create
+  p 
+  textarea(id="model", readonly="readonly", cols="50", rows="2")
